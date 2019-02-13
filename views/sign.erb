@@ -1,0 +1,12 @@
+<h1>Sign up to barber</h1>
+<form action = "/sign" method = "POST">
+    <input type = "text" name = "name" value = "<%= @name %>" placeholder = "Input your name"><br><br>
+	<input type = "email" name = "email" value = "<%= @email %>" placeholder = "Input your email"><br><br>
+	<input type = "date" name = "date" value = "<%= @date %>" placeholder = "Input date"><br><br>
+	<select name = "barber">
+	    <option value = "Grey">Grey</option>
+		<option value = "Green">Green</option>
+		<option value = "Blue">Blue</option>
+	</select><br><br>
+	<input type = "submit" value = "Sign up" class="btn btn-primary">
+</form>

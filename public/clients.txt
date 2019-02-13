@@ -1,0 +1,7 @@
+Name: Goi, mail: , date: 2019-02-10, barber: Green.
+Name: Hooo, mail: hooo@mail, date: 2019-02-11, barber: Blue.
+Name: , mail: , date: , barber: Grey.
+Name: gggg, mail: vgg@mail.com, date: 2019-02-14, barber: Grey.
+Name: , mail: , date: , barber: Grey.
+Name: JJJ, mail: , date: , barber: Grey.
+Name: , mail: , date: , barber: Grey.

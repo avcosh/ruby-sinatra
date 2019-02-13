@@ -1,43 +1,85 @@
 require 'rubygems'
 require 'sinatra'
-
-configure do
-  enable :sessions
-end
-
-helpers do
-  def username
-    session[:identity] ? session[:identity] : 'Hello stranger'
-  end
-end
-
-before '/secure/*' do
-  unless session[:identity]
-    session[:previous_url] = request.path
-    @error = 'Sorry, you need to be logged in to visit ' + request.path
-    halt erb(:login_form)
-  end
-end
+require 'sinatra/reloader'
+require 'pony'
 
 get '/' do
-  erb 'Can you handle a <a href="/secure/place">secret</a>?'
+    erb "Hello"
 end
 
-get '/login/form' do
-  erb :login_form
+get '/about' do
+    erb 'All about us'
 end
 
-post '/login/attempt' do
-  session[:identity] = params['username']
-  where_user_came_from = session[:previous_url] || '/'
-  redirect to where_user_came_from
+get '/sign' do
+    erb :sign
 end
 
-get '/logout' do
-  session.delete(:identity)
-  erb "<div class='alert alert-message'>Logged out</div>"
+post '/sign' do
+    @name = params[:name]
+	@email = params[:email]
+	@date = params[:date]
+	@barber = params[:barber]
+	
+	
+	
+	hh = { :name => 'Enter name',
+	       :email => 'Enter email',
+		   :date => 'Enter date',
+		   :barber => 'Enter barber'}
+	
+	#hh.each do |key, value|
+	#    if params[key] == ''
+	#	    @error = hh[key]
+	#		return erb :sign
+	#	end
+	#end
+	
+	@error = hh.select {|key,_| params[key] == ""}.values.join(", ")
+	
+	file = File.open "./public/clients.txt", "a"
+	file.write "Name: #{@name}, mail: #{@email}, date: #{@date}, barber: #{@barber}.\n"
+	file.close
+	
+	erb "Your data: #{@name}, #{@date}, #{@barber}"
 end
 
-get '/secure/place' do
-  erb 'This is a secret place that only <%=session[:identity]%> has access to!'
+get '/contacts' do
+    erb :contacts
+end
+
+post '/contacts' do
+    @email = params[:email]
+	@text = params[:text]
+	
+	hh = { 
+	       :email => 'Enter email',
+		   :text => 'Enter text',
+		 }
+	@error = hh.select {|key,_| params[key] == ""}.values.join(", ")
+	
+	Pony.mail(:to => 'ksenon-spb@mail.ru', :from => "#{@email}", :subject => "test", :body => "#{@text}")
+	
+	file = File.open "./public/contacts.txt", "a"
+	file.write "mail: #{@email}, text: #{@text}.\n"
+	file.close
+	
+	erb "Thank for contact"
+	
+end
+
+get '/login' do
+    erb :login
+end
+
+post '/login' do
+    @login = params[:login]
+	@password = params[:password]
+    
+    if @login == 'admin' && @password == 'secret'
+	    @file = File.open "./public/clients.txt", "r"
+	    erb :admin
+    else
+	    erb "Access denied"
+    end	
 end

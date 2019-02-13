@@ -1,0 +1,2 @@
+mail: foo@mail, text: Bla bla bla.
+mail: , text: .
